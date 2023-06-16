@@ -365,9 +365,19 @@ Enabling event logging may slightly affect performance."
 
 (defun copilot--get-completion (callback)
   "Get completion with CALLBACK."
+  (when REQUESTS
+    (push (copilot--generate-doc) REQUESTS)
+    (push (backtrace-to-string (backtrace)) BACKTRACES))
   (copilot--async-request 'getCompletions
                           (list :doc (copilot--generate-doc))
                           :success-fn callback))
+
+(setq REQUESTS nil BACKTRACES nil)
+;; (setq REQUESTS '(t) BACKTRACES '(t))
+;; (setq A REQUESTS B BACKTRACES)
+;; (setq REQUESTS nil BACKTRACES nil)
+
+
 
 (defun copilot--get-completions-cycling (callback)
   "Get completion cycling options with CALLBACK."
